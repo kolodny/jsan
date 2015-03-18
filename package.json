@@ -1,0 +1,28 @@
+{
+  "name": "json.js",
+  "version": "1.0.0",
+  "description": "handle circular references when stringifying and parsing",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "json"
+  ],
+  "author": "Moshe Kolodny",
+  "license": "MIT",
+  "devDependencies": {
+    "rek": "0.0.3"
+  },
+  "dependencies": {
+    "rek": "^0.0.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kolodny/jsan.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kolodny/jsan/issues"
+  },
+  "homepage": "https://github.com/kolodny/jsan"
+}
