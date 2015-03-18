@@ -1,5 +1,5 @@
 {
-  "name": "json.js",
+  "name": "jsan",
   "version": "1.0.0",
   "description": "handle circular references when stringifying and parsing",
   "main": "index.js",
