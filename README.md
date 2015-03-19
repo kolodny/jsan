@@ -10,8 +10,11 @@ var jsan = require('jsan');
 
 var obj = {};
 obj['self'] = obj;
+obj['sub'] = {};
+obj['sub']['subSelf'] = obj['sub'];
 var str = jsan.stringify(obj);
-str === '{"self":{"$ref":"$"}}'; // true
+str === '{"self":{"$ref":"$"},"sub":{"subSelf":{"$ref":"[\\"sub\\"]"}}}'; // true
 var obj2 = jsan.parse(str);
 obj2 === obj2['self']; // true
+obj2['sub']['subSelf'] === obj2['sub']; // true
 ```
