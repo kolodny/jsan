@@ -24,6 +24,12 @@ describe('jsan', function() {
       assert.equal(jsan.stringify(obj), '{"a":1,"b":"string","c":[2,3],"d":null,"self":{"$ref":"$"}}');
     });
 
+    it('works on objects that will get encoded with \\uXXXX', function() {
+      var obj = {"\u017d\u010d":{},"kraj":"\u017du\u017e"};
+      obj["\u017d\u010d"]["\u017d\u010d"] = obj["\u017d\u010d"];
+      assert.equal(jsan.stringify(obj), '{"\u017d\u010d":{"\u017d\u010d":{"$ref":"$[\\\"\u017d\u010d\\\"]"}},"kraj":"Žuž"}');
+    });
+
     it('works on circular arrays', function() {
       var obj = [];
       obj[0] = [];
@@ -44,6 +50,12 @@ describe('jsan', function() {
       var str = '{"a":1,"b":"string","c":[2,3],"d":null,"self":{"$ref":"$"}}';
       var obj = jsan.parse(str);
       assert(obj['self'] === obj);
+    });
+
+    it('works on objects encoded with \\uXXXX', function() {
+      var str = '{"\u017d\u010d":{"\u017d\u010d":{"$ref":"$[\\\"\\u017d\\u010d\\\"]"}},"kraj":"Žuž"}';
+      var obj = jsan.parse(str);
+      assert(obj["\u017d\u010d"]["\u017d\u010d"] === obj["\u017d\u010d"]);
     });
 
     it('works on array strings with circular dereferences', function() {
