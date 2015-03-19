@@ -24,6 +24,13 @@ describe('jsan', function() {
       assert.equal(jsan.stringify(obj), '{"a":1,"b":"string","c":[2,3],"d":null,"self":{"$ref":"$"}}');
     });
 
+    it('works on circular arrays', function() {
+      var obj = [];
+      obj[0] = [];
+      obj[0][0] = obj[0];
+      assert.equal(jsan.stringify(obj), '[[{"$ref":"$[0]"}]]');
+    });
+
   });
 
 
@@ -33,10 +40,16 @@ describe('jsan', function() {
       assert.deepEqual(JSON.parse(str), jsan.parse(str));
     });
 
-    it('works on strings with a circular dereference', function() {
+    it('works on object strings with a circular dereferences', function() {
       var str = '{"a":1,"b":"string","c":[2,3],"d":null,"self":{"$ref":"$"}}';
       var obj = jsan.parse(str);
       assert(obj['self'] === obj);
+    });
+
+    it('works on array strings with circular dereferences', function() {
+      var str = '[[{"$ref":"$[0]"}]]';
+      var arr = jsan.parse(str);
+      assert(arr[0][0] === arr[0]);
     });
   });
 

@@ -1,6 +1,6 @@
 {
   "name": "jsan",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "handle circular references when stringifying and parsing",
   "main": "index.js",
   "scripts": {
@@ -13,10 +13,9 @@
   "license": "MIT",
   "devDependencies": {
     "mocha": "^2.2.1",
-    "rek": "0.0.3"
+    "rek": "0.0.4"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "repository": {
     "type": "git",
     "url": "https://github.com/kolodny/jsan.git"

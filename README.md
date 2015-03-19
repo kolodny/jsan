@@ -11,6 +11,7 @@ var jsan = require('jsan');
 var obj = {};
 obj['self'] = obj;
 var str = jsan.stringify(obj);
+str === '{"self":{"$ref":"$"}}'; // true
 var obj2 = jsan.parse(str);
 obj2 === obj2['self']; // true
 ```
