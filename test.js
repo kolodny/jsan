@@ -24,17 +24,24 @@ describe('jsan', function() {
       assert.equal(jsan.stringify(obj), '{"a":1,"b":"string","c":[2,3],"d":null,"self":{"$ref":"$"}}');
     });
 
+    it('works on objects with "[", "\'", and "]" in the keys', function() {
+      var obj = {};
+      obj['["key"]'] = {};
+      obj['["key"]']['["key"]'] = obj['["key"]'];
+      assert.equal(jsan.stringify(obj), '{"[\\"key\\"]":{"[\\"key\\"]":{"$ref":"[\\"[\\\\\\"key\\\\\\"]\\"]"}}}');
+    });
+
     it('works on objects that will get encoded with \\uXXXX', function() {
       var obj = {"\u017d\u010d":{},"kraj":"\u017du\u017e"};
       obj["\u017d\u010d"]["\u017d\u010d"] = obj["\u017d\u010d"];
-      assert.equal(jsan.stringify(obj), '{"\u017d\u010d":{"\u017d\u010d":{"$ref":"$[\\\"\u017d\u010d\\\"]"}},"kraj":"Žuž"}');
+      assert.equal(jsan.stringify(obj), '{"\u017d\u010d":{"\u017d\u010d":{"$ref":"[\\\"\u017d\u010d\\\"]"}},"kraj":"Žuž"}');
     });
 
     it('works on circular arrays', function() {
       var obj = [];
       obj[0] = [];
       obj[0][0] = obj[0];
-      assert.equal(jsan.stringify(obj), '[[{"$ref":"$[0]"}]]');
+      assert.equal(jsan.stringify(obj), '[[{"$ref":"[0]"}]]');
     });
 
   });
@@ -52,14 +59,20 @@ describe('jsan', function() {
       assert(obj['self'] === obj);
     });
 
+    it('works on object strings with "[", "\'", and "]" in the keys', function() {
+      var str = '{"[\\"key\\"]":{"[\\"key\\"]":{"$ref":"[\\"[\\\\\\"key\\\\\\"]\\"]"}}}';
+      var obj = jsan.parse(str);
+      assert(obj['["key"]']['["key"]'] === obj['["key"]']);
+    });
+
     it('works on objects encoded with \\uXXXX', function() {
-      var str = '{"\u017d\u010d":{"\u017d\u010d":{"$ref":"$[\\\"\\u017d\\u010d\\\"]"}},"kraj":"Žuž"}';
+      var str = '{"\u017d\u010d":{"\u017d\u010d":{"$ref":"[\\\"\\u017d\\u010d\\\"]"}},"kraj":"Žuž"}';
       var obj = jsan.parse(str);
       assert(obj["\u017d\u010d"]["\u017d\u010d"] === obj["\u017d\u010d"]);
     });
 
     it('works on array strings with circular dereferences', function() {
-      var str = '[[{"$ref":"$[0]"}]]';
+      var str = '[[{"$ref":"[0]"}]]';
       var arr = jsan.parse(str);
       assert(arr[0][0] === arr[0]);
     });
