@@ -2,8 +2,8 @@ var assert = require('assert');
 var jsan = require('rek')('');
 
 describe('jsan', function() {
-  describe('has a stringify method', function() {
-    it('behaves the same as JSON.stringify for jsonable objects', function() {
+    describe('has a stringify method', function() {
+    it('behaves the same as JSON.stringify for simple jsonable objects', function() {
       var obj = {
         a: 1,
         b: 'string',
@@ -13,15 +13,18 @@ describe('jsan', function() {
       assert.equal(JSON.stringify(obj), jsan.stringify(obj));
     });
 
-    it('works on objects with circular references', function() {
+    it('can handle dates', function() {
       var obj = {
-        a: 1,
-        b: 'string',
-        c: [2,3],
-        d: null
-      };
+        now: new Date()
+      }
+      var str = jsan.stringify(obj, null, null, true);
+      assert(/^\{"now":\{"\$ref":\{"\$date":"[^"]*"\}\}\}$/.test(str));
+    });
+
+    it('works on objects with circular references', function() {
+      var obj = {};
       obj['self'] = obj;
-      assert.equal(jsan.stringify(obj), '{"a":1,"b":"string","c":[2,3],"d":null,"self":{"$ref":"$"}}');
+      assert.equal(jsan.stringify(obj), '{"self":{"$ref":"$"}}');
     });
 
     it('works on objects with "[", "\'", and "]" in the keys', function() {
@@ -47,10 +50,17 @@ describe('jsan', function() {
   });
 
 
+
   describe('has a parse method', function() {
     it('behaves the same as JSON.parse for valid json strings', function() {
       var str = '{"a":1,"b":"string","c":[2,3],"d":null}';
       assert.deepEqual(JSON.parse(str), jsan.parse(str));
+    });
+
+    it('can encoded dates', function() {
+      var str = '{"now":{"$ref":{"$date":"2015-03-24T15:00:00.000Z"}}}';
+      var obj = jsan.parse(str);
+      assert(obj.now instanceof Date);
     });
 
     it('works on object strings with a circular dereferences', function() {
@@ -76,28 +86,6 @@ describe('jsan', function() {
       var arr = jsan.parse(str);
       assert(arr[0][0] === arr[0]);
     });
-  });
-
-  it('can round trip a regular object', function() {
-    var obj1 = {a: {b: {c: {d: 1}}}};
-    var obj2 = jsan.parse(jsan.stringify(obj1));
-    assert.deepEqual(obj1, obj2);
-  });
-
-  it('can round trip a circular object', function() {
-    var obj1 = {};
-    obj1['self'] = obj1;
-    var obj2 = jsan.parse(jsan.stringify(obj1));
-    assert(obj2['self'] === obj2);
-  });
-
-  it('can round trip a self referencing objects', function() {
-    var obj1 = {};
-    var subObj = {};
-    obj1.a = subObj;
-    obj1.b = subObj;
-    var obj2 = jsan.parse(jsan.stringify(obj1, null, null, true));
-    assert(obj2.a === obj2.b);
   });
 
 });

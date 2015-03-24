@@ -6,7 +6,7 @@ jsan
 ### JavaScript "All The Things" Notation  
 ![JSAN](https://i.imgur.com/IdKDIB6.png)
 
-Easily stringify and parse any object including objects with circular references, using the familar `parse` and `stringify` methods.
+Easily stringify and parse any object including objects with circular references or dates, using the familar `parse` and `stringify` methods.
 
 ### Usage
 
@@ -17,18 +17,20 @@ var obj = {};
 obj['self'] = obj;
 obj['sub'] = {};
 obj['sub']['subSelf'] = obj['sub'];
+obj.now = new Date();
 var str = jsan.stringify(obj);
-str === '{"self":{"$ref":"$"},"sub":{"subSelf":{"$ref":"[\\"sub\\"]"}}}'; // true
+str === ''{"self":{"$ref":"$"},"sub":{"subSelf":{"$ref":"[\\"sub\\"]"}},"now":{"$ref":{"$date":"2015-03-24T15:08:00.000Z"}}}'; // true
 var obj2 = jsan.parse(str);
 obj2 === obj2['self']; // true
 obj2['sub']['subSelf'] === obj2['sub']; // true
+obj2.now instanceof Date; // true
 ```
 
 Now with 100% less `eval`!
 
 #### Note
 
-This ulitilty has been heavily optimized and performs as well as the native `JSON.parse` and `JSON.stringify`. It doesn't by default handle self references (non-circular) when stringifing but you can force it to check for that by passing in `true` as a forth arg:
+This ulitilty has been heavily optimized and performs as well as the native `JSON.parse` and `JSON.stringify`. It doesn't by default handle self references (non-circular), or dates when stringifing but you can force it to by passing in `true` as a forth arg:
 
 ```js
 var obj = {};
