@@ -30,7 +30,7 @@ Now with 100% less `eval`!
 
 #### Note
 
-This ulitilty has been heavily optimized and performs as well as the native `JSON.parse` and `JSON.stringify`. It doesn't by default handle self references (non-circular), or dates when stringifing but you can force it to by passing in `true` as a forth arg:
+This ulitilty has been heavily optimized and performs as well as the native `JSON.parse` and `JSON.stringify`. It doesn't by default handle self references (non-circular), or dates when stringifing but you can force it to by passing in `true` as a fourth arg:
 
 ```js
 var obj = {};
