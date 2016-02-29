@@ -66,25 +66,25 @@ describe('jsan', function() {
     it('works on object strings with a circular dereferences', function() {
       var str = '{"a":1,"b":"string","c":[2,3],"d":null,"self":{"$jsan":"$"}}';
       var obj = jsan.parse(str);
-      assert(obj['self'] === obj);
+      assert.deepEqual(obj['self'], obj);
     });
 
     it('works on object strings with "[", "\'", and "]" in the keys', function() {
       var str = '{"[\\"key\\"]":{"[\\"key\\"]":{"$jsan":"$[\\"[\\\\\\"key\\\\\\"]\\"]"}}}';
       var obj = jsan.parse(str);
-      assert(obj['["key"]']['["key"]'] === obj['["key"]']);
+      assert.deepEqual(obj['["key"]']['["key"]'], obj['["key"]']);
     });
 
     it('works on objects encoded with \\uXXXX', function() {
       var str = '{"\u017d\u010d":{"\u017d\u010d":{"$jsan":"$[\\\"\\u017d\\u010d\\\"]"}},"kraj":"Žuž"}';
       var obj = jsan.parse(str);
-      assert(obj["\u017d\u010d"]["\u017d\u010d"] === obj["\u017d\u010d"]);
+      assert.deepEqual(obj["\u017d\u010d"]["\u017d\u010d"], obj["\u017d\u010d"]);
     });
 
     it('works on array strings with circular dereferences', function() {
       var str = '[[{"$jsan":"$[0]"}]]';
       var arr = jsan.parse(str);
-      assert(arr[0][0] === arr[0]);
+      assert.deepEqual(arr[0][0], arr[0]);
     });
   });
 

@@ -14,7 +14,7 @@ describe('jsan', function() {
     var obj1 = {};
     obj1['self'] = obj1;
     var obj2 = jsan.parse(jsan.stringify(obj1));
-    assert(obj2['self'] === obj2);
+    assert.deepEqual(obj2['self'], obj2);
   });
 
   it('can round trip a self referencing objects', function() {
@@ -23,25 +23,26 @@ describe('jsan', function() {
     obj1.a = subObj;
     obj1.b = subObj;
     var obj2 = jsan.parse(jsan.stringify(obj1, null, null, true));
-    assert(obj2.a === obj2.b);
+    assert.deepEqual(obj2.a, obj2.b);
   });
 
   it('can round trip dates', function() {
     var obj1 = { now: new Date() };
     var obj2 = jsan.parse(jsan.stringify(obj1, null, null, true));
-    assert(obj1.now.getTime(), obj2.now.getTime());
+    assert.deepEqual(obj1, obj2);
   });
 
   it('can round trip regexs', function() {
     var obj1 = { r: /test/ };
     var obj2 = jsan.parse(jsan.stringify(obj1, null, null, true));
-    assert(obj2.r instanceof RegExp && obj1.r.source === obj2.r.source);
+    assert.deepEqual(obj1, obj2);
   });
 
   it('can round trip functions (toString())', function() {
     var obj1 = { f: function(foo) { bar } };
     var obj2 = jsan.parse(jsan.stringify(obj1, null, null, true));
-    assert(obj1.f instanceof Function && obj1.f.toString() === obj2.f.toString());
+    assert(obj2.f instanceof Function);
+    assert.throws(obj2.f);
   });
 
   it('can round trip undefined', function() {
@@ -59,9 +60,17 @@ describe('jsan', function() {
     obj1.sub2 = obj1.sub1;
     var obj2 = jsan.parse(jsan.stringify(obj1, null, null, true));
     assert(obj2.now instanceof Date);
-    assert(obj2.sub1 === obj2.sub2);
+    assert.deepEqual(obj2.sub1, obj2.sub2);
     assert(obj2['self'] === obj2);
   });
+
+  it('allows a custom function toString()', function() {
+    var obj1 = { f: function() { return 42; } };
+    var options = {};
+    options['function'] = function(fn) { return fn.toString().toUpperCase(); };
+    var obj2 = jsan.parse(jsan.stringify(obj1, null, null, options));
+    assert.deepEqual(obj2.f.toString(), obj1.f.toString().toUpperCase());
+  })
 
   it("doesn't blow up for object with $jsan keys", function() {
     var obj1 = {$jsan: 'd1400000000000'};
