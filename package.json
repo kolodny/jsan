@@ -12,6 +12,8 @@
   "author": "Moshe Kolodny",
   "license": "MIT",
   "devDependencies": {
+    "circular-json": "^0.3.0",
+    "json-stringify-safe": "^5.0.1",
     "mocha": "^2.2.1",
     "rek": "0.0.4"
   },

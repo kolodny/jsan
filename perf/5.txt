@@ -1,0 +1,55 @@
+global at 1000 iterations
+    jsan took 666
+    CircularJSON took 566
+    json-stringify-safe took 1045
+
+decycledGlobal at 1000 iterations
+    jsan took 85
+    CircularJSON took 403
+    json-stringify-safe took 854
+
+empty object at 1000000 iterations
+    jsan took 331
+    CircularJSON took 462
+    json-stringify-safe took 498
+
+empty array at 1000000 iterations
+    jsan took 328
+    CircularJSON took 286
+    json-stringify-safe took 324
+
+small object at 100000 iterations
+    jsan took 50
+    CircularJSON took 141
+    json-stringify-safe took 442
+
+self referencing small object at 100000 iterations
+    jsan took 48
+    CircularJSON took 146
+    json-stringify-safe took 437
+
+small array at 100000 iterations
+    jsan took 41
+    CircularJSON took 128
+    json-stringify-safe took 483
+
+self referencing small array at 100000 iterations
+    jsan took 45
+    CircularJSON took 153
+    json-stringify-safe took 514
+
+string at 1000000 iterations
+    jsan took 286
+    CircularJSON took 269
+    json-stringify-safe took 297
+
+number at 1000000 iterations
+    jsan took 213
+    CircularJSON took 174
+    json-stringify-safe took 202
+
+null at 1000000 iterations
+    jsan took 199
+    CircularJSON took 188
+    json-stringify-safe took 205
+
