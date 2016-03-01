@@ -13,6 +13,11 @@ describe('jsan', function() {
       assert.equal(JSON.stringify(obj), jsan.stringify(obj));
     });
 
+    it('uses the toJSON() method when possible', function() {
+      var obj = { toJSON: function() { return 'foobar' } };
+      assert.equal(jsan.stringify(obj), '"foobar"');
+    });
+
     it('can handle dates', function() {
       var obj = {
         now: new Date()

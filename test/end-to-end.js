@@ -1,5 +1,6 @@
 var assert = require('assert');
 var jsan = require('../');
+var immutable = require('immutable');
 
 describe('jsan', function() {
 
@@ -88,6 +89,39 @@ describe('jsan', function() {
     var obj1 = {$jsan: new Date()};
     var obj2 = jsan.parse(jsan.stringify(obj1, null, null, true));
     assert.deepEqual(obj1, obj2);
+  });
+
+  it("doesn't blow up on immutable.js", function() {
+    var obj = {
+      i: immutable.Map({
+        someList: immutable.List(),
+        someMap: immutable.Map({
+          foo: function() {},
+          bar: 123
+        })
+      })
+    };
+    assert.deepEqual(JSON.stringify(obj), jsan.stringify(obj));
+  });
+
+  it("allows replacer functions when traversing", function() {
+    var obj1 = {
+      i: immutable.Map({
+        someList: immutable.List(),
+        someMap: immutable.Map({
+          foo: function() {},
+          bar: 123
+        })
+      })
+    };
+    obj1.self = obj1;
+    var obj2 = jsan.parse(jsan.stringify(obj1, function(key, value) {
+      if (value && value.toJS) { return value.toJS(); }
+      return value;
+    }, null, true));
+    assert.deepEqual(obj2.i.someList, []);
+    assert.deepEqual(obj2.self, obj2);
+    assert(obj2.i.someMap.foo instanceof Function);
   });
 
 
