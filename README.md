@@ -69,7 +69,7 @@ obj.a = subObj;
 obj.b = subObj;
 var str1 = jsan.stringify(obj) // '{"r":{},a":{},"b":{}}'
 var str2 = jsan.stringify(obj, null, null, false) // '{"r":{},"a":{},"b":{"$jsan":"$.a"}}'
-var str3 = jsan.stringify(obj, null, null, false) // '{"r":{"$jsan":"r,test"},"a":{},"b":{"$jsan":"$.a"}}'
+var str3 = jsan.stringify(obj, null, null, true) // '{"r":{"$jsan":"r,test"},"a":{},"b":{"$jsan":"$.a"}}'
 ```
 
 ##### Functions
