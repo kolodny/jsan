@@ -1,5 +1,5 @@
 var assert = require('assert');
-var jsan = require('rek')('');
+var jsan = require('../');
 
 describe('jsan', function() {
     describe('has a stringify method', function() {

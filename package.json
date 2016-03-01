@@ -1,6 +1,6 @@
 {
   "name": "jsan",
-  "version": "2.0.4",
+  "version": "3.0.0",
   "description": "handle circular references when stringifying and parsing",
   "main": "index.js",
   "scripts": {
@@ -14,8 +14,7 @@
   "devDependencies": {
     "circular-json": "^0.3.0",
     "json-stringify-safe": "^5.0.1",
-    "mocha": "^2.2.1",
-    "rek": "0.0.4"
+    "mocha": "^2.2.1"
   },
   "dependencies": {},
   "repository": {
