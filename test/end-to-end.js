@@ -51,6 +51,12 @@ describe('jsan', function() {
     assert('u' in obj2 && obj2.u === undefined);
   });
 
+  it('can round trip errors', function() {
+    var obj1 = { e: new Error('oh noh! :O') };
+    var obj2 = jsan.parse(jsan.stringify(obj1, null, null, true));
+    assert.deepEqual(obj1.e.message, obj2.e.message);
+  });
+
   it('can round trip a complex object', function() {
     var obj1 = {
       sub1: {},

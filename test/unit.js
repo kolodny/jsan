@@ -21,6 +21,38 @@ describe('jsan', function() {
       assert(/^\{"now":\{"\$jsan":"d[^"]*"\}\}$/.test(str));
     });
 
+    it('can handle regexes', function() {
+      var obj = {
+        r: /test/
+      }
+      var str = jsan.stringify(obj, null, null, true);
+      assert.deepEqual(str, '{"r":{"$jsan":"r,test"}}');
+    });
+
+    it('can handle functions', function() {
+      var obj = {
+        f: function() {}
+      }
+      var str = jsan.stringify(obj, null, null, true);
+      assert.deepEqual(str, '{"f":{"$jsan":"ffunction () { /* ... */ }"}}');
+    });
+
+    it('can handle undefined', function() {
+      var obj = {
+        u: undefined
+      }
+      var str = jsan.stringify(obj, null, null, true);
+      assert.deepEqual(str, '{"u":{"$jsan":"u"}}');
+    });
+
+    it('can handle errors', function() {
+      var obj = {
+        e: new Error(':(')
+      }
+      var str = jsan.stringify(obj, null, null, true);
+      assert.deepEqual(str, '{"e":{"$jsan":"e:("}}');
+    });
+
     it('works on objects with circular references', function() {
       var obj = {};
       obj['self'] = obj;
@@ -62,6 +94,31 @@ describe('jsan', function() {
       var obj = jsan.parse(str);
       assert(obj.now instanceof Date);
     });
+
+    it('can decode regexes', function() {
+      str = '{"r":{"$jsan":"r,test"}}';
+      var obj = jsan.parse(str);
+      assert(obj.r instanceof RegExp )
+    });
+
+    it('can decode functions', function() {
+      str = '{"f":{"$jsan":"ffunction () { /* ... */ }"}}';
+      var obj = jsan.parse(str);
+      assert(obj.f instanceof Function);
+    });
+
+    it('can decode undefined', function() {
+      str = '{"u":{"$jsan":"u"}}';
+      var obj = jsan.parse(str);
+      assert('u' in obj && obj.u === undefined);
+    });
+
+    it('can decode errors', function() {
+      str = '{"e":{"$jsan":"e:("}}';
+        var obj = jsan.parse(str);
+       assert(obj.e instanceof Error && obj.e.message === ':(');
+    });
+
 
     it('works on object strings with a circular dereferences', function() {
       var str = '{"a":1,"b":"string","c":[2,3],"d":null,"self":{"$jsan":"$"}}';

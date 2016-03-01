@@ -6,13 +6,13 @@ jsan
 ### JavaScript "All The Things" Notation  
 ![jsan](https://i.imgur.com/IdKDIB6.png)
 
-Easily stringify and parse any object including objects with circular references, dates, regexes, and even functions
+Easily stringify and parse any object including objects with circular references, self references, dates, regexes, `undefined`, errors, and even functions
 <sub>[1](#functions)</sub>, using the familar `parse` and `stringify` methods.
 
 There are two ways to use this library, the first is to be able to
 serialize without having to worry about circular references,
-the second way is be able to handle dates, regexes, functions
-<sub>[1](#functions)</sub> and undefined (normally
+the second way is be able to handle dates, regexes, errors, functions
+<sub>[1](#functions)</sub>, errors, and undefined (normally
 `JSON.stringify({ u: undefined }) === '{}'`)
 
 The usage reflect these two approaches. If you just want to be
@@ -60,7 +60,7 @@ This ulitilty has been heavily optimized and performs as well as the native `JSO
 It does this by first `try { JSON.stringify(obj) }` and only when that fails, will it walk
 the object. Because of this it won't property handle self references that aren't circular by
 default. You can work around this by passing false as the fourth argument, or pass true and it
-will also handle dates, regexes, functions, and `undefined`.
+will also handle dates, regexes, `undefeined`, errors, and functions
 
 ```js
 var obj = { r: /test/ };
