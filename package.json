@@ -1,6 +1,6 @@
 {
   "name": "jsan",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "description": "handle circular references when stringifying and parsing",
   "main": "index.js",
   "scripts": {
