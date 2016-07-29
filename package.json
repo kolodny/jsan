@@ -16,6 +16,7 @@
     "circular-json": "^0.3.0",
     "immutable": "^3.7.6",
     "json-stringify-safe": "^5.0.1",
+    "mobx": "^2.4.1",
     "mocha": "^2.2.1",
     "rimraf": "^2.5.2"
   },
