@@ -1,3 +1,4 @@
+var assert = require('assert');
 var jsan = require('../');
 var mobx = require('mobx');
 
@@ -18,7 +19,8 @@ var todoListFactory = function () {
   });
 };
 
-var store = todoListFactory();
-store.addTodo(todoFactory('Write simpler code', store));
-
-console.log(jsan.stringify(store, null, null, true))
+describe('mobx case', function() {
+  var store = todoListFactory();
+  store.addTodo(todoFactory('Write simpler code', store));
+  assert.equal(jsan.stringify(store), '{"todos":[{"store":{"$jsan":"$"},"title":"Write simpler code"}]}');
+});
