@@ -20,7 +20,9 @@ var todoListFactory = function () {
 };
 
 describe('mobx case', function() {
-  var store = todoListFactory();
-  store.addTodo(todoFactory('Write simpler code', store));
-  assert.equal(jsan.stringify(store), '{"todos":[{"store":{"$jsan":"$"},"title":"Write simpler code"}]}');
+  it('still works', function() {
+    var store = todoListFactory();
+    store.addTodo(todoFactory('Write simpler code', store));
+    assert.equal(jsan.stringify(store), '{"todos":[{"store":{"$jsan":"$"},"title":"Write simpler code"}]}');
+  });
 });
