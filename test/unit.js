@@ -58,13 +58,15 @@ describe('jsan', function() {
       assert.deepEqual(str, '{"e":{"$jsan":"e:("}}');
     });
 
-    it('can handle ES symbols', function() {
-      var obj = {
-        s: Symbol('a')
-      }
-      var str = jsan.stringify(obj, null, null, true);
-      assert.deepEqual(str, '{"s":{"$jsan":"sa"}}');
-    });
+    if (typeof Symbol !== 'undefined') {
+      it('can handle ES symbols', function() {
+        var obj = {
+          s: Symbol('a')
+        }
+        var str = jsan.stringify(obj, null, null, true);
+        assert.deepEqual(str, '{"s":{"$jsan":"sa"}}');
+      });
+    }
 
     it('works on objects with circular references', function() {
       var obj = {};
@@ -132,12 +134,14 @@ describe('jsan', function() {
       assert(obj.e instanceof Error && obj.e.message === ':(');
     });
 
-    it('can decode ES symbols', function() {
-      str = '{"s1":{"$jsan":"sfoo"}, "s2":{"$jsan":"s"}}';
-      var obj = jsan.parse(str);
-      assert(typeof obj.s1 === 'symbol' && obj.s1.toString() === 'Symbol(foo)');
-      assert(typeof obj.s2 === 'symbol' && obj.s2.toString() === 'Symbol()');
-    });
+    if (typeof Symbol !== 'undefined') {
+      it('can decode ES symbols', function() {
+        str = '{"s1":{"$jsan":"sfoo"}, "s2":{"$jsan":"s"}}';
+        var obj = jsan.parse(str);
+        assert(typeof obj.s1 === 'symbol' && obj.s1.toString() === 'Symbol(foo)');
+        assert(typeof obj.s2 === 'symbol' && obj.s2.toString() === 'Symbol()');
+      });
+    }
 
 
     it('works on object strings with a circular dereferences', function() {
