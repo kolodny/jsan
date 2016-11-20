@@ -14,8 +14,8 @@ describe('jsan', function() {
     });
 
     it('uses the toJSON() method when possible', function() {
-      var obj = { toJSON: function() { return 'foobar' } };
-      assert.equal(jsan.stringify(obj), '"foobar"');
+      var obj = { a: { b: 1, toJSON: function(key) { return key } } };
+      assert.equal(jsan.stringify(obj, null, null, false), '{"a":"a"}');
     });
 
     it('can handle dates', function() {
