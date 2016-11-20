@@ -58,6 +58,14 @@ describe('jsan', function() {
       assert.deepEqual(str, '{"e":{"$jsan":"e:("}}');
     });
 
+    it('can handle ES symbols', function() {
+      var obj = {
+        e: Symbol('a')
+      }
+      var str = jsan.stringify(obj, null, null, true);
+      assert.deepEqual(str, '{"e":{"$jsan":"sSymbol(a)"}}');
+    });
+
     it('works on objects with circular references', function() {
       var obj = {};
       obj['self'] = obj;
