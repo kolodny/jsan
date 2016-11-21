@@ -74,6 +74,15 @@ describe('jsan', function() {
       assert.equal(jsan.stringify(obj), '{"self":{"$jsan":"$"}}');
     });
 
+    it('can use the circular option', function() {
+      var obj = {};
+      obj.self = obj;
+      obj.a = 1;
+      obj.b = {};
+      obj.c = obj.b;
+      assert.equal(jsan.stringify(obj, null, null, {circular: ' ∞'}), '{"self":" ∞","a":1,"b":{},"c":{"$jsan":"$.b"}}');
+    });
+
     it('works on objects with "[", "\'", and "]" in the keys', function() {
       var obj = {};
       obj['["key"]'] = {};
