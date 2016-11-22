@@ -77,7 +77,7 @@ describe('jsan', function() {
     options['function'] = function(fn) { return fn.toString().toUpperCase(); };
     var obj2 = jsan.parse(jsan.stringify(obj1, null, null, options));
     assert.deepEqual(obj2.f.toString(), obj1.f.toString().toUpperCase());
-  })
+  });
 
   it("doesn't blow up for object with $jsan keys", function() {
     var obj1 = {$jsan: 'd1400000000000'};

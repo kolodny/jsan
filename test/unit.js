@@ -80,7 +80,8 @@ describe('jsan', function() {
       obj.a = 1;
       obj.b = {};
       obj.c = obj.b;
-      assert.equal(jsan.stringify(obj, null, null, {circular: ' ∞'}), '{"self":" ∞","a":1,"b":{},"c":{"$jsan":"$.b"}}');
+      assert.equal(jsan.stringify(obj, null, null, {circular: '∞'}), '{"self":"∞","a":1,"b":{},"c":{"$jsan":"$.b"}}');
+      assert.equal(jsan.stringify(obj, null, null, {circular: function() { return '∞!' }}), '{"self":"∞!","a":1,"b":{},"c":{"$jsan":"$.b"}}');
     });
 
     it('works on objects with "[", "\'", and "]" in the keys', function() {
@@ -101,6 +102,15 @@ describe('jsan', function() {
       obj[0] = [];
       obj[0][0] = obj[0];
       assert.equal(jsan.stringify(obj), '[[{"$jsan":"$[0]"}]]');
+    });
+
+    it('works correctly for mutiple calls with the same object', function() {
+      var obj = {};
+      obj.self = obj;
+      obj.a = {};
+      obj.b = obj.a;
+      assert.equal(jsan.stringify(obj), '{"self":{"$jsan":"$"},"a":{},"b":{"$jsan":"$.a"}}');
+      assert.equal(jsan.stringify(obj), '{"self":{"$jsan":"$"},"a":{},"b":{"$jsan":"$.a"}}');
     });
 
   });

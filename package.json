@@ -4,7 +4,7 @@
   "description": "handle circular references when stringifying and parsing",
   "main": "index.js",
   "scripts": {
-    "benchmark": "rimraf 'perf/*.txt' && for i in `seq 1 9`; do node perf/bench > perf/$i.txt; done",
+    "benchmark": "node perf/bench > perf/results.txt",
     "test": "mocha"
   },
   "keywords": [
@@ -13,6 +13,7 @@
   "author": "Moshe Kolodny",
   "license": "MIT",
   "devDependencies": {
+    "benchmark": "^2.1.2",
     "circular-json": "^0.3.0",
     "immutable": "^3.7.6",
     "json-stringify-safe": "^5.0.1",
