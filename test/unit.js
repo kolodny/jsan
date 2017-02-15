@@ -66,6 +66,14 @@ describe('jsan', function() {
         var str = jsan.stringify(obj, null, null, true);
         assert.deepEqual(str, '{"s":{"$jsan":"sa"}}');
       });
+
+      it('can handle global ES symbols', function() {
+        var obj = {
+          g: Symbol.for('a')
+        }
+        var str = jsan.stringify(obj, null, null, true);
+        assert.deepEqual(str, '{"g":{"$jsan":"ga"}}');
+      });
     }
 
     it('works on objects with circular references', function() {
@@ -159,6 +167,13 @@ describe('jsan', function() {
         var obj = jsan.parse(str);
         assert(typeof obj.s1 === 'symbol' && obj.s1.toString() === 'Symbol(foo)');
         assert(typeof obj.s2 === 'symbol' && obj.s2.toString() === 'Symbol()');
+      });
+
+      it('can decode global ES symbols', function() {
+        str = '{"g1":{"$jsan":"gfoo"}, "g2":{"$jsan":"gundefined"}}';
+        var obj = jsan.parse(str);
+        assert(typeof obj.g1 === 'symbol' && obj.g1 === Symbol.for('foo'));
+        assert(typeof obj.g2 === 'symbol' && obj.g2 === Symbol.for());
       });
     }
 
