@@ -76,6 +76,20 @@ describe('jsan', function() {
       });
     }
 
+    if (typeof Map !== 'undefined' && typeof Array.from !== 'undefined') {
+      it('can handle ES Map', function() {
+        var obj = {
+          map: new Map([
+            ['a', 1],
+            [{toString: function(){ return 'a' }}, 2],
+            [{}, 3]
+          ])
+        }
+        var str = jsan.stringify(obj, null, null, true);
+        assert.deepEqual(str, '{"map":{"$jsan":"m[[\\"a\\",1],[{\\"toString\\":{\\"$jsan\\":\\"ffunction (){ /* ... */ }\\"}},2],[{},3]]"}}');
+      });
+    }
+
     it('works on objects with circular references', function() {
       var obj = {};
       obj['self'] = obj;
@@ -177,6 +191,20 @@ describe('jsan', function() {
       });
     }
 
+    if (typeof Map !== 'undefined' && typeof Array.from !== 'undefined') {
+      it('can decode ES Map', function() {
+        var str = '{"map":{"$jsan":"m[[\\"a\\",1],[{\\"toString\\":{\\"$jsan\\":\\"ffunction (){ /* ... */ }\\"}},2],[{},3]]"}}';
+        var obj = jsan.parse(str);
+        var keys = obj.map.keys();
+        var values = obj.map.values();
+        assert.equal(keys.next().value, 'a');
+        assert.equal(typeof keys.next().value.toString, 'function');
+        assert.equal(typeof keys.next().value, 'object');
+        assert.equal(values.next().value, 1);
+        assert.equal(values.next().value, 2);
+        assert.equal(values.next().value, 3);
+      });
+    }
 
     it('works on object strings with a circular dereferences', function() {
       var str = '{"a":1,"b":"string","c":[2,3],"d":null,"self":{"$jsan":"$"}}';
