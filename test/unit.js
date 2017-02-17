@@ -90,6 +90,16 @@ describe('jsan', function() {
       });
     }
 
+    if (typeof Set !== 'undefined' && typeof Array.from !== 'undefined') {
+      it('can handle ES Set', function() {
+        var obj = {
+          set: new Set(['a', {toString: function(){ return 'a' }}, {}])
+        }
+        var str = jsan.stringify(obj, null, null, true);
+        assert.deepEqual(str, '{"set":{"$jsan":"l[\\"a\\",{\\"toString\\":{\\"$jsan\\":\\"ffunction (){ /* ... */ }\\"}},{}]"}}');
+      });
+    }
+
     it('works on objects with circular references', function() {
       var obj = {};
       obj['self'] = obj;
@@ -203,6 +213,17 @@ describe('jsan', function() {
         assert.equal(values.next().value, 1);
         assert.equal(values.next().value, 2);
         assert.equal(values.next().value, 3);
+      });
+    }
+
+    if (typeof Set !== 'undefined' && typeof Array.from !== 'undefined') {
+      it('can decode ES Set', function() {
+        var str = '{"set":{"$jsan":"l[\\"a\\",{\\"toString\\":{\\"$jsan\\":\\"ffunction (){ /* ... */ }\\"}},{}]"}}';
+        var obj = jsan.parse(str);
+        var values = obj.set.values();
+        assert.equal(values.next().value, 'a');
+        assert.equal(typeof values.next().value.toString, 'function');
+        assert.equal(typeof values.next().value, 'object');
       });
     }
 
