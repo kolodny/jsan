@@ -49,7 +49,31 @@ describe('jsan', function() {
       var str = jsan.stringify(obj, null, null, true);
       assert.deepEqual(str, '{"u":{"$jsan":"u"}}');
     });
-
+      
+    it('can handle NaN', function() {
+      var obj = {
+        u: NaN
+      }
+      var str = jsan.stringify(obj, null, null, true);
+      assert.deepEqual(str, '{"u":{"$jsan": "n"}}');
+    });
+      
+    it('can handle Infinity', function() {
+      var obj = {
+        u: Infinity
+      }
+      var str = jsan.stringify(obj, null, null, true);
+      assert.deepEqual(str, '{"u":{"$jsan": "i"}}');
+    });
+      
+    it('can handle -Infinity', function() {
+      var obj = {
+        u: -Infinity
+      }
+      var str = jsan.stringify(obj, null, null, true);
+      assert.deepEqual(str, '{"u":{"$jsan": "y"}}');
+    });
+      
     it('can handle errors', function() {
       var obj = {
         e: new Error(':(')
@@ -177,6 +201,24 @@ describe('jsan', function() {
       str = '{"u":{"$jsan":"u"}}';
       var obj = jsan.parse(str);
       assert('u' in obj && obj.u === undefined);
+    });
+    
+    it('can decode NaN', function() {
+      str = '{"u":{"$jsan":"n"}}';
+      var obj = jsan.parse(str);
+      assert('u' in obj && isNaN(obj.u) && typeof obj.u === 'number');
+    });
+    
+    it('can decode Infinity', function() {
+      str = '{"u":{"$jsan":"i"}}';
+      var obj = jsan.parse(str);
+      assert('u' in obj && obj.u === Number.POSITIVE_INFINITY);
+    });
+    
+    it('can decode -Infinity', function() {
+      str = '{"u":{"$jsan":"y"}}';
+      var obj = jsan.parse(str);
+      assert('u' in obj && obj.u === Number.NEGATIVE_INFINITY);
     });
 
     it('can decode errors', function() {
