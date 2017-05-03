@@ -43,6 +43,30 @@ describe('jsan', function() {
     });
 
     it('can handle undefined', function() {
+      var obj = undefined;
+      var str = jsan.stringify(obj, null, null, true);
+      assert.deepEqual(str, '{"$jsan":"u"}');
+    });
+
+    it('can handle NaN', function() {
+      var obj = NaN;
+      var str = jsan.stringify(obj, null, null, true);
+      assert.deepEqual(str, '{"$jsan":"n"}');
+    });
+
+    it('can handle Infinity', function() {
+      var obj = Infinity;
+      var str = jsan.stringify(obj, null, null, true);
+      assert.deepEqual(str, '{"$jsan":"i"}');
+    });
+
+    it('can handle -Infinity', function() {
+      var obj = -Infinity;
+      var str = jsan.stringify(obj, null, null, true);
+      assert.deepEqual(str, '{"$jsan":"y"}');
+    });
+
+    it('can handle nested undefined', function() {
       var obj = {
         u: undefined
       }
@@ -50,7 +74,7 @@ describe('jsan', function() {
       assert.deepEqual(str, '{"u":{"$jsan":"u"}}');
     });
 
-    it('can handle NaN', function() {
+    it('can handle nested NaN', function() {
       var obj = {
         u: NaN
       }
@@ -58,7 +82,7 @@ describe('jsan', function() {
       assert.deepEqual(str, '{"u":{"$jsan":"n"}}');
     });
 
-    it('can handle Infinity', function() {
+    it('can handle nested Infinity', function() {
       var obj = {
         u: Infinity
       }
@@ -66,7 +90,7 @@ describe('jsan', function() {
       assert.deepEqual(str, '{"u":{"$jsan":"i"}}');
     });
 
-    it('can handle -Infinity', function() {
+    it('can handle nested -Infinity', function() {
       var obj = {
         u: -Infinity
       }
@@ -180,48 +204,96 @@ describe('jsan', function() {
     });
 
     it('can decode dates', function() {
+      var str = '{"$jsan":"d1400000000000"}';
+      var obj = jsan.parse(str);
+      assert(obj instanceof Date);
+    });
+
+    it('can decode regexes', function() {
+      str = '{"$jsan":"r,test"}';
+      var obj = jsan.parse(str);
+      assert(obj instanceof RegExp )
+    });
+
+    it('can decode functions', function() {
+      str = '{"$jsan":"ffunction () { /* ... */ }"}';
+      var obj = jsan.parse(str);
+      assert(obj instanceof Function);
+    });
+
+    it('can decode undefined', function() {
+      str = '{"$jsan":"u"}';
+      var obj = jsan.parse(str);
+      assert(obj === undefined);
+    });
+
+    it('can decode NaN', function() {
+      str = '{"$jsan":"n"}';
+      var obj = jsan.parse(str);
+      assert(isNaN(obj) && typeof obj === 'number');
+    });
+
+    it('can decode Infinity', function() {
+      str = '{"$jsan":"i"}';
+      var obj = jsan.parse(str);
+      assert(obj === Number.POSITIVE_INFINITY);
+    });
+
+    it('can decode -Infinity', function() {
+      str = '{"$jsan":"y"}';
+      var obj = jsan.parse(str);
+      assert(obj === Number.NEGATIVE_INFINITY);
+    });
+
+    it('can decode errors', function() {
+      str = '{"$jsan":"e:("}';
+      var obj = jsan.parse(str);
+      assert(obj instanceof Error && obj.message === ':(');
+    });
+
+    it('can decode nested dates', function() {
       var str = '{"now":{"$jsan":"d1400000000000"}}';
       var obj = jsan.parse(str);
       assert(obj.now instanceof Date);
     });
 
-    it('can decode regexes', function() {
+    it('can decode nested regexes', function() {
       str = '{"r":{"$jsan":"r,test"}}';
       var obj = jsan.parse(str);
       assert(obj.r instanceof RegExp )
     });
 
-    it('can decode functions', function() {
+    it('can decode nested functions', function() {
       str = '{"f":{"$jsan":"ffunction () { /* ... */ }"}}';
       var obj = jsan.parse(str);
       assert(obj.f instanceof Function);
     });
 
-    it('can decode undefined', function() {
+    it('can decode nested undefined', function() {
       str = '{"u":{"$jsan":"u"}}';
       var obj = jsan.parse(str);
       assert('u' in obj && obj.u === undefined);
     });
 
-    it('can decode NaN', function() {
+    it('can decode nested NaN', function() {
       str = '{"u":{"$jsan":"n"}}';
       var obj = jsan.parse(str);
       assert('u' in obj && isNaN(obj.u) && typeof obj.u === 'number');
     });
 
-    it('can decode Infinity', function() {
+    it('can decode nested Infinity', function() {
       str = '{"u":{"$jsan":"i"}}';
       var obj = jsan.parse(str);
       assert('u' in obj && obj.u === Number.POSITIVE_INFINITY);
     });
 
-    it('can decode -Infinity', function() {
+    it('can decode nested -Infinity', function() {
       str = '{"u":{"$jsan":"y"}}';
       var obj = jsan.parse(str);
       assert('u' in obj && obj.u === Number.NEGATIVE_INFINITY);
     });
 
-    it('can decode errors', function() {
+    it('can decode nested errors', function() {
       str = '{"e":{"$jsan":"e:("}}';
       var obj = jsan.parse(str);
       assert(obj.e instanceof Error && obj.e.message === ':(');
