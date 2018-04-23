@@ -18,7 +18,7 @@
     "immutable": "^3.8.2",
     "json-stringify-safe": "^5.0.1",
     "mobx": "^2.4.1",
-    "mocha": "^5.1.1",
+    "mocha": "^2.2.1",
     "rimraf": "^2.5.2",
     "remotedev-serialize": "^0.1.1"
   },
