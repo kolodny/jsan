@@ -17,7 +17,6 @@ describe('remotedev-serialize', function() {
         fst: new record(),
         scnd: new record(),
     });
-    debugger;
     var serialized = jsan.stringify(obj, serialize(immutable, refs).replacer, null, true);
     var parsed = JSON.parse(serialized);
 
