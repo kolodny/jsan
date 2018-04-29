@@ -36,7 +36,7 @@ describe('jsan', function() {
 
     it('can handle functions', function() {
       var obj = {
-        f: function() {}
+        f: function () {}
       }
       var str = jsan.stringify(obj, null, null, true);
       assert.deepEqual(str, '{"f":{"$jsan":"ffunction () { /* ... */ }"}}');
@@ -129,7 +129,7 @@ describe('jsan', function() {
         var obj = {
           map: new Map([
             ['a', 1],
-            [{toString: function(){ return 'a' }}, 2],
+            [{toString: function (){ return 'a' }}, 2],
             [{}, 3]
           ])
         }
@@ -141,7 +141,7 @@ describe('jsan', function() {
     if (typeof Set !== 'undefined' && typeof Array.from !== 'undefined') {
       it('can handle ES Set', function() {
         var obj = {
-          set: new Set(['a', {toString: function(){ return 'a' }}, {}])
+          set: new Set(['a', {toString: function (){ return 'a' }}, {}])
         }
         var str = jsan.stringify(obj, null, null, true);
         assert.deepEqual(str, '{"set":{"$jsan":"l[\\"a\\",{\\"toString\\":{\\"$jsan\\":\\"ffunction (){ /* ... */ }\\"}},{}]"}}');
