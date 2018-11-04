@@ -2,7 +2,33 @@ var assert = require('assert');
 var jsan = require('../');
 
 describe('jsan', function() {
-    describe('has a stringify method', function() {
+  describe('has a stringify method', function() {
+    it('respects the replacer array argument', function() {
+      var obj = {a: 1, b: 2};
+      var JSONed = JSON.stringify(obj, ['a']);
+      var jsaned = jsan.stringify(obj, ['a']);
+      assert.equal(JSONed, jsaned);
+    });
+
+    it('respects the replacer function argument', function() {
+      var obj = {a: 1, b: 2, c: {r: /foo/}};
+      var replacer = function(index, value) {
+        if (value.test) {
+          return value.toString();
+        }
+      }
+      var JSONed = JSON.stringify(obj, replacer);
+      var jsaned = jsan.stringify(obj, replacer);
+      assert.equal(JSONed, jsaned);
+    });
+
+    it('respects the space argument', function() {
+      var obj = {a: 1, b: 2, c: {foo: 'bar'}};
+      var JSONed = JSON.stringify(obj, null, 2);
+      var jsaned = jsan.stringify(obj, null, 2);
+      assert.equal(JSONed, jsaned);
+    });
+
     it('behaves the same as JSON.stringify for simple jsonable objects', function() {
       var obj = {
         a: 1,
