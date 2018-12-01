@@ -235,6 +235,12 @@ describe('jsan', function() {
       assert(obj instanceof Date);
     });
 
+    it('can decode dates while using reviver', function() {
+      var str = '{"$jsan":"d1400000000000"}';
+      var obj = jsan.parse(str, function (key, value) { return value; });
+      assert(obj instanceof Date);
+    });
+
     it('can decode regexes', function() {
       str = '{"$jsan":"r,test"}';
       var obj = jsan.parse(str);
