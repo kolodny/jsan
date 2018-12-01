@@ -228,6 +228,13 @@ describe('jsan', function() {
       var str = '{"a":1,"b":"string","c":[2,3],"d":null}';
       assert.deepEqual(JSON.parse(str), jsan.parse(str));
     });
+   
+    it('uses reviver function', function() {
+      var str = '{"a":1,"b":null}';
+      assert.deepEqual({"a":1,"b":2},
+        jsan.parse(str, function (key, value) { return key === "b" ? 2 : value; })
+      );
+    });
 
     it('can decode dates', function() {
       var str = '{"$jsan":"d1400000000000"}';
