@@ -10,7 +10,7 @@ describe('remotedev-serialize', function() {
     var record = immutable.Record({
         prop: sharedValue,
     });
-
+    
     var refs = [record];
 
     var obj = immutable.Map({
@@ -25,7 +25,7 @@ describe('remotedev-serialize', function() {
 
     assert.notStrictEqual(fstProp, scndProp);
     assert.ok(scndProp.hasOwnProperty('$jsan') && (typeof scndProp.$jsan === 'string' || parsed.data.scnd.data.prop.$jsan instanceof String));
-
+    
     var deserialized = jsan.parse(serialized, serialize(immutable, refs).reviver);
     assert.ok(Array.isArray(deserialized.get('scnd').get('prop')), 'deserialized structure has unresolved references');
   });
