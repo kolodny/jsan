@@ -17,7 +17,7 @@ describe('remotedev-serialize', function() {
         fst: new record(),
         scnd: new record(),
     });
-    debugger;
+
     var serialized = jsan.stringify(obj, serialize(immutable, refs).replacer, null, true);
     var parsed = JSON.parse(serialized);
 
@@ -28,6 +28,6 @@ describe('remotedev-serialize', function() {
     assert.ok(scndProp.hasOwnProperty('$jsan') && (typeof scndProp.$jsan === 'string' || parsed.data.scnd.data.prop.$jsan instanceof String));
     
     var deserialized = jsan.parse(serialized, serialize(immutable, refs).reviver);
-    assert.ok(Array.isArray(deserialized.get('scnd').get('prop')), 'deserialized structure has unresolved references');
+    assert.ok(Array.isArray(obj.get('fst').get('prop')));
   });
 });
