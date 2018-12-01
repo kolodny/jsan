@@ -190,6 +190,15 @@ describe('jsan', function() {
       assert.equal(jsan.stringify(obj, null, null, {circular: function() { return '∞!' }}), '{"self":"∞!","a":1,"b":{},"c":{"$jsan":"$.b"}}');
     });
 
+    it('can use the refs option', function() {
+      var obj1 = { a: 1 };
+      var obj = { "prop1": obj1, "prop2": { "prop3": obj1 } };
+      assert.equal(jsan.stringify(obj, null, null, {refs: true}), '{"prop1":{"a":1},"prop2":{"prop3":{"$jsan":"$.prop1"}}}');
+      assert.equal(jsan.stringify(obj, null, null, true), '{"prop1":{"a":1},"prop2":{"prop3":{"$jsan":"$.prop1"}}}');
+      assert.equal(jsan.stringify(obj, null, null, false), '{"prop1":{"a":1},"prop2":{"prop3":{"$jsan":"$.prop1"}}}');
+      assert.equal(jsan.stringify(obj, null, null, {refs: false}), '{"prop1":{"a":1},"prop2":{"prop3":{"a":1}}}');
+    });
+
     it('works on objects with "[", "\'", and "]" in the keys', function() {
       var obj = {};
       obj['["key"]'] = {};
