@@ -199,6 +199,15 @@ describe('jsan', function() {
       assert.equal(jsan.stringify(obj, null, null, {refs: false}), '{"prop1":{"a":1},"prop2":{"prop3":{"a":1}}}');
     });
 
+    it('ignores refs option if there are circular references', function() {
+      var obj = {};
+      obj.self = obj;
+      obj.a = 1;
+      obj.b = {};
+      obj.c = obj.b;
+      assert.equal(jsan.stringify(obj, null, null, {refs: false}), '{"self":{"$jsan":"$"},"a":1,"b":{},"c":{"$jsan":"$.b"}}');
+    });
+
     it('works on objects with "[", "\'", and "]" in the keys', function() {
       var obj = {};
       obj['["key"]'] = {};
