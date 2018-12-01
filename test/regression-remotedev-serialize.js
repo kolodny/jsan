@@ -27,7 +27,7 @@ describe('remotedev-serialize', function() {
     assert.notStrictEqual(fstProp, scndProp);
     assert.ok(scndProp.hasOwnProperty('$jsan') && (typeof scndProp.$jsan === 'string' || parsed.data.scnd.data.prop.$jsan instanceof String));
     
-    var deserialized = jsan.parse(serialized, serialize(immutable, refs).reviver);
+    const deserialized = jsan.parse(serialized, serialize(immutable, refs).reviver);
     assert.ok(Array.isArray(obj.get('fst').get('prop')));
   });
 });
