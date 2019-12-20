@@ -238,6 +238,28 @@ describe('jsan', function() {
       assert.equal(jsan.stringify(obj), '{"self":{"$jsan":"$"},"a":{},"b":{"$jsan":"$.a"}}');
     });
 
+    it('does not report false positives for circular references', function() {
+      /**
+       * This is a test for an edge case in which jsan.stringify falsely reported circular references
+       * The minimal conditions are
+       * 1) The object has an error preventing serialization by json.stringify
+       * 2) The object contains a repeated reference
+       * 3) the second path of the reference contains the first path
+       */
+      var circular = {};
+      circular.self = circular;
+      
+      var ref = {};
+      
+      var obj = {
+        circularRef: circular,
+        ref: ref,
+        refAgain: ref,
+      };
+      
+      var result = jsan.stringify(obj, null, null, { circular: "[CIRCULAR]" });
+      assert.equal('{"circularRef":{"self":"[CIRCULAR]"},"ref":{},"refAgain":{"$jsan":"$.ref"}}', result)
+    });
   });
 
 
